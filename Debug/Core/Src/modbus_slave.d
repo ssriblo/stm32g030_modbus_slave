@@ -31,7 +31,7 @@ Core/Src/modbus_slave.o: ../Core/Src/modbus_slave.c \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rtc_ex.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
- ../Core/Inc/usart.h ../Core/Inc/gpio.h
+ ../Core/Inc/nanomodbus.h ../Core/Inc/usart.h ../Core/Inc/gpio.h
 ../Core/Inc/modbus_slave.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h:
@@ -65,5 +65,6 @@ Core/Src/modbus_slave.o: ../Core/Src/modbus_slave.c \
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rtc_ex.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h:
+../Core/Inc/nanomodbus.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/gpio.h:

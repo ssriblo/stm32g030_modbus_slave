@@ -54,7 +54,7 @@ static int32_t platform_write(const uint8_t* buf, uint16_t count, int32_t byte_t
 }
 
 // nanoMODBUS Register Callbacks
-static nmbs_error read_holding_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, void* arg) {
+static nmbs_error read_holding_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, uint8_t unit_id, void* arg) {
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t addr = address + i;
         
@@ -66,13 +66,13 @@ static nmbs_error read_holding_registers(uint16_t address, uint16_t quantity, ui
         } else if (addr == 0x0002) {
             registers_out[i] = uid_32bit & 0xFFFF; // Serial LO
         } else {
-            return NMBS_ERROR_ILLEGAL_DATA_ADDRESS;
+            return NMBS_EXCEPTION_ILLEGAL_DATA_ADDRESS;
         }
     }
     return NMBS_ERROR_NONE;
 }
 
-static nmbs_error read_input_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, void* arg) {
+static nmbs_error read_input_registers(uint16_t address, uint16_t quantity, uint16_t* registers_out, uint8_t unit_id, void* arg) {
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t addr = address + i;
         
@@ -94,7 +94,7 @@ static nmbs_error read_input_registers(uint16_t address, uint16_t quantity, uint
                 registers_out[i] = 1; // 1 = POR
                 break;
             default:
-                return NMBS_ERROR_ILLEGAL_DATA_ADDRESS;
+                return NMBS_EXCEPTION_ILLEGAL_DATA_ADDRESS;
         }
     }
     return NMBS_ERROR_NONE;

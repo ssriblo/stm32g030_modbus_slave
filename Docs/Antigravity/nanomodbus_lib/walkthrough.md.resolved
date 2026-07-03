@@ -1,0 +1,23 @@
+# nanoMODBUS Rewrite Complete
+
+I have successfully replaced the custom low-level Modbus parser with the **nanoMODBUS** library, following the exact register mapping you requested while laying the groundwork for the future expansion.
+
+## What changed?
+
+1. **Library Added:** I downloaded `nanomodbus.c` and `nanomodbus.h` directly into your `Core/Src` and `Core/Inc` directories.
+2. **Circular Buffer:** The UART RX interrupt now feeds bytes into a standard 256-byte circular ring buffer. We no longer rely on the STM32 hardware RTO (Receiver Timeout) interrupt, as nanoMODBUS handles all timing internally (using `HAL_GetTick()`).
+3. **Platform Callbacks:**
+   - `platform_read`: Grabs bytes from our circular ring buffer.
+   - `platform_write`: Toggles the RS485 DE pin (`PA1`) and transmits data via `HAL_UART_Transmit()`.
+4. **Register Map Configured:**
+   - **Holding Registers (0x03/0x06):**
+     - `0x0000`: Returns Firmware Version (for compatibility).
+     - `0x0001`: Returns 32-bit Serial Number HI.
+     - `0x0002`: Returns 32-bit Serial Number LO.
+   - **Input Registers (0x04) [Future Proofing]:**
+     - I created stubs for all the registers you defined in `modbus_reg.md` (Voltage, Current, Power, Energy, Uptime). They currently return `0` but are ready for you to plug in the actual sensor variables.
+     - `0x0007`: Returns Firmware Version.
+     - `0x0008`: Returns Reset Cause (stubbed to 1).
+
+## Next Steps
+In STM32CubeIDE, you might need to right-click the project in the Project Explorer and hit **"Refresh"** so that the IDE picks up the newly added `nanomodbus.c` file and includes it in the build. You can then compile and flash as usual!

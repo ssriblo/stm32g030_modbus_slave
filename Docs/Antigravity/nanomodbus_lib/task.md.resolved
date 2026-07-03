@@ -1,0 +1,5 @@
+- [x] Download `nanomodbus.c` and `nanomodbus.h` to project folders.
+- [x] Update `modbus_slave.c` and `modbus_slave.h` to use nanoMODBUS API.
+- [x] Implement `platform_read` and `platform_write` callbacks.
+- [x] Implement `read_holding_registers` callback for FW version and Serial Number.
+- [x] Implement circular ring buffer in `Modbus_UART_IRQHandler`.

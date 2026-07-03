@@ -1,0 +1,6 @@
+- [x] Update `gpio.c` and `gpio.h` to configure PA1 as DE output.
+- [x] Update `usart.c` and `usart.h` to add USART2 initialization (PA2/PA3) with interrupts.
+- [x] Update `stm32g0xx_it.c` and `stm32g0xx_it.h` to add `USART2_IRQHandler`.
+- [x] Create `modbus_slave.h`.
+- [x] Create `modbus_slave.c` with Modbus parsing, UID logic, and CRC16.
+- [x] Update `main.c` to integrate Modbus initialization and polling.

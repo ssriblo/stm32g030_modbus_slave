@@ -1,0 +1,46 @@
+Ran command: `git push -u origin master`
+Ran command: `git pull`
+Ran command: `git branch --set-upstream-to=origin/master master`
+Ran command: `git pull`
+Ran command: `git push -u origin master`
+
+Since you deleted the `.git` folder locally to start from scratch, you now have a clean slate. 
+
+The error you experienced earlier happened because you likely checked the "Add a README" or "Add a License" box when creating the repository on GitHub. This created a commit on GitHub that didn't exist on your computer, causing a conflict.
+
+Here is the step-by-step guide to setting up your Git repository from scratch and forcefully pushing it to GitHub (which will overwrite whatever is currently on the GitHub repository, fixing the conflict):
+
+Run these commands in your terminal one by one:
+
+**1. Initialize the new local Git repository:**
+```bash
+git init
+```
+
+**2. Add all your files:**
+```bash
+git add .
+```
+
+**3. Make your initial commit:**
+```bash
+git commit -m "Initial commit with Modbus RTU implementation"
+```
+
+**4. Rename the default branch to `main`** (This is the modern GitHub standard instead of `master`):
+```bash
+git branch -M main
+```
+
+**5. Link your local repository to your GitHub repository:**
+```bash
+git remote add origin git@github.com:ssriblo/stm32g030_modbus_slave.git
+```
+*(Note: I used the SSH link since your terminal output showed you were previously using SSH to push).*
+
+**6. Force push your code to GitHub:**
+```bash
+git push -u -f origin main
+```
+
+The `-f` (force) flag in the last command is the magic key here. It tells GitHub to discard whatever history it currently has (like the default README) and replace it entirely with your local project's history.

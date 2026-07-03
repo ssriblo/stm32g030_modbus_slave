@@ -1,0 +1,7 @@
+../Core/Src/modbus_slave.c:14:13:RS485_DE_Enable	1
+../Core/Src/modbus_slave.c:18:13:RS485_DE_Disable	1
+../Core/Src/modbus_slave.c:23:17:Modbus_CRC16	4
+../Core/Src/modbus_slave.c:39:6:Modbus_Init	1
+../Core/Src/modbus_slave.c:57:13:Modbus_SendResponse	1
+../Core/Src/modbus_slave.c:67:6:Modbus_Process	14
+../Core/Src/modbus_slave.c:142:6:Modbus_UART_IRQHandler	6

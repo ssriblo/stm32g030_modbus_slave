@@ -1,0 +1,32 @@
+# RS485 Modbus RTU Implementation
+
+I have successfully added the baseline RS485 Modbus RTU slave implementation to your STM32G030 project based on your requirements. Here is a summary of the changes:
+
+## 1. Hardware Configuration
+*   **RS485 Driver Enable (DE):** Configured `PA1` as a push-pull GPIO output to control the Transmit/Receive state of the RS485 transceiver. It defaults to low (receive mode).
+*   **USART2 for Modbus:** Configured `USART2` on pins `PA2` (TX) and `PA3` (RX) with a default baud rate of 9600 8N1. This operates independently of the existing `USART1`.
+*   **Hardware Frame Detection:** Enabled the STM32G0's built-in Receiver Timeout (RTO) interrupt for USART2. This allows the hardware to automatically detect the 3.5 character time silence that marks the end of a Modbus RTU frame, which is highly efficient and eliminates the need for software timers.
+
+## 2. Modbus Logic
+I created `modbus_slave.c` and `modbus_slave.h` to handle the parsing and response generation:
+*   **Interrupt-Driven Reception:** The `USART2_IRQHandler` buffers incoming bytes using the RXNE (Receive Data Register Not Empty) interrupt. When the RTO (Receiver Timeout) interrupt fires, a `frame_ready` flag is set.
+*   **UID to 32-bit Serial Number:** The `Modbus_Init()` function reads the STM32's unique 96-bit ID using the HAL macros (`HAL_GetUIDw0/1/2`) and XORs the three 32-bit words together to create a squeezed 32-bit serial number.
+*   **Register Map (Function Code 0x03 & 0x04):**
+    *   **Register 0x0000:** Firmware version (Hardcoded to `0x0100` for v1.0.0).
+    *   **Register 0x0001:** Serial Number (High Word).
+    *   **Register 0x0002:** Serial Number (Low Word).
+*   **Response Generation:** It handles the CRC-16 calculation, switches `PA1` to HIGH for transmission, sends the buffer via USART2, and switches `PA1` back to LOW.
+
+## 3. Main Loop Integration
+*   Added `Modbus_Init()` and `MX_USART2_UART_Init()` calls before the infinite `while(1)` loop in `main.c`.
+*   Added `Modbus_Process()` inside the `while(1)` loop to check for the `frame_ready` flag and handle incoming commands as fast as possible.
+
+## How to Test
+1. Compile the project in STM32CubeIDE.
+2. Flash the STM32G030F6P6 test board.
+3. Connect an RS485 to USB converter to your board:
+   * RO -> PA3 (RX)
+   * DI -> PA2 (TX)
+   * DE/RE -> PA1
+4. Use a Modbus tool on your PC (e.g., QModBus, Modbus Poll) configured to **Baud 9600, 8 Data Bits, 1 Stop Bit, No Parity**, and **Slave ID 1**.
+5. Read Holding Registers (Function Code 0x03) starting at address 0 (Length 3). You should receive the firmware version and the 32-bit Serial Number.
